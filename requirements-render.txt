@@ -7,3 +7,4 @@ python-dotenv==1.0.0
 firebase-admin==6.8.0
 flask_login==0.6.3
 pandas==3.0.1
+scikit-learn==1.8.0
