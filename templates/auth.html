@@ -3,94 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register & Login</title>
+    <title>Register & Login - HeartGuard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="{{ url_for('static', filename='css/authstyle.css') }}" rel="stylesheet">
-    <script  type="module"  src="{{ url_for('static', filename='js/firebase.js') }}"></script>
+    <style>
+        /* Enhanced auth styling */
+        :root {
+            --heart-primary: #dc3545;
+            --heart-secondary: #bb2d3b;
+            --heart-dark: #8a1823;
+            --accent-blue: #1d3557;
+            --accent-teal: #457b9d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e48c8e 0%, #ff6969 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--heart-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            font-size: 32px;
+            background: linear-gradient(to right, var(--heart-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-teal);
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 50px;
+            padding: 0 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .input-group input:focus {
+            border-color: var(--heart-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #999;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: 0;
+            left: 45px;
+            font-size: 12px;
+            color: var(--heart-primary);
+            background: white;
+            padding: 0 5px;
+        }
+
+        .messageDiv {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .messageDiv.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .messageDiv.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, var(--heart-primary), var(--heart-secondary));
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn-toggle {
+            background-color: white;
+            color: var(--heart-primary);
+            border: 2px solid var(--heart-primary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .btn-toggle:hover {
+            background-color: var(--heart-primary);
+            color: white;
+        }
+
+        .or {
+            text-align: center;
+            margin: 25px 0;
+            color: #999;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .or::before,
+        .or::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+
+        .or::before {
+            left: 0;
+        }
+
+        .or::after {
+            right: 0;
+        }
+
+        .icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .icons i {
+            font-size: 28px;
+            color: var(--accent-teal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .icons i:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.1);
+            color: var(--heart-primary);
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links p {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .links button {
+            background: none;
+            border: none;
+            color: var(--heart-primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .links button:hover {
+            color: var(--heart-secondary);
+        }
+
+        .recover {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .recover a {
+            color: var(--heart-primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .recover a:hover {
+            color: var(--heart-secondary);
+            text-decoration: underline;
+        }
+
+        .logo-header {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--heart-primary);
+        }
+
+        .logo-header i {
+            margin-right: 8px;
+            font-size: 28px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+
+            .input-group input {
+                height: 45px;
+                font-size: 14px;
+            }
+
+            .btn {
+                height: 45px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container" id="signup" style="display:none;">
-      <h1 class="form-title">Register</h1>
-      <div>
-        <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
-        <div class="input-group">
-           <i class="fas fa-user"></i>
-           <input type="text" id="fName" placeholder="First Name" required>
-           <label for="fname">First Name</label>
+    <!-- Loading indicator -->
+    <div id="loadingIndicator" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="lName" placeholder="Last Name" required>
-            <label for="lName">Last Name</label>
-        </div>
-        <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" id="rEmail" placeholder="Email" required>
-            <label for="rEmail">Email</label>
-        </div>
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="rPassword" placeholder="Password" required>
-            <label for="rPassword">Password</label>
-        </div>
-       <button type="button" class="btn" id="submitSignUp">Sign Up</button>
-      </div>
-      <p class="or">
-        ----------or--------
-      </p>
-      <div class="links">
-        <p>Already Have Account ?</p>
-        <button id="signInButton">Sign In</button>
-      </div>
     </div>
 
-    <div class="container" id="signIn">
-        <h1 class="form-title">Sign In</h1>
-        <div>
-          <div id="signInMessage" class="messageDiv" style="display:none;"></div>
-          <div class="input-group">
-              <i class="fas fa-envelope"></i>
-              <input type="email" id="email" placeholder="Email" required>
-              <label for="email">Email</label>
-          </div>
-          <div class="input-group">
-              <i class="fas fa-lock"></i>
-            <input type="password" id="password" placeholder="Password" required>
-              <label for="password">Password</label>
-          </div>
-          <p class="recover">
-            <a href="#">Recover Password</a>
-          </p>
-         <button type="button" class="btn" id="submitSignIn">Sign In</button>
+    <div class="auth-wrapper">
+        <!-- Sign Up Form -->
+        <div class="container" id="signup" style="display: none;">
+            <div class="logo-header">
+                <i class="bi bi-heart-pulse"></i> HeartGuard
+            </div>
+            <h1 class="form-title"><i class="bi bi-person-plus-fill"></i> Register</h1>
+            <div>
+                <div id="signUpMessage" class="messageDiv" style="display: none;"></div>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="fName" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="lName" placeholder="Last Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="rEmail" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="rPassword" placeholder="Password (min 6 chars)" required>
+                </div>
+                <button type="button" class="btn btn-submit" id="submitSignUp">
+                    <i class="bi bi-check-circle"></i> Create Account
+                </button>
+            </div>
+            <p class="or">or</p>
+            <div class="icons">
+                <i class="fab fa-google" title="Sign up with Google"></i>
+                <i class="fab fa-facebook" title="Sign up with Facebook"></i>
+            </div>
+            <div class="links">
+                <p>Already have an account?</p>
+                <button id="signInButton" type="button">Sign In</button>
+            </div>
         </div>
-        <p class="or">
-          ----------or--------
-        </p>
-        <div class="icons">
-          <i class="fab fa-google"></i>
-          <i class="fab fa-facebook"></i>
-        </div>
-        <div class="links">
-          <p>Don't have account yet?</p>
-          <button id="signUpButton">Sign Up</button>
-        </div>
-      </div>
-      <script>
-        // Toggle between forms
-        const signUpButton = document.getElementById('signUpButton');
-        const signInButton = document.getElementById('signInButton');
-        const signInForm = document.getElementById('signIn');
-        const signUpForm = document.getElementById('signup');
 
-        signUpButton.addEventListener('click', function() {
-            signInForm.style.display = "none";
-            signUpForm.style.display = "block";
-        });
-        
-        signInButton.addEventListener('click', function() {
-            signInForm.style.display = "block";
-            signUpForm.style.display = "none";
-        });
-      </script>
+        <!-- Sign In Form -->
+        <div class="container" id="signIn">
+            <div class="logo-header">
+                <i class="bi bi-heart-pulse"></i> HeartGuard
+            </div>
+            <h1 class="form-title"><i class="bi bi-box-arrow-in-right"></i> Sign In</h1>
+            <div>
+                <div id="signInMessage" class="messageDiv" style="display: none;"></div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <p class="recover">
+                    <a href="#" title="Password recovery coming soon">Forgot Password?</a>
+                </p>
+                <button type="button" class="btn btn-submit" id="submitSignIn">
+                    <i class="bi bi-check-circle"></i> Sign In
+                </button>
+            </div>
+            <p class="or">or</p>
+            <div class="icons">
+                <i class="fab fa-google" title="Sign in with Google"></i>
+                <i class="fab fa-facebook" title="Sign in with Facebook"></i>
+            </div>
+            <div class="links">
+                <p>Don't have an account?</p>
+                <button id="signUpButton" type="button">Register Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Firebase configuration - passed from Flask backend
+        const firebaseConfig = {{ firebase_config | tojson }};
+        console.log("Firebase config loaded in auth.html");
+    </script>
+    
+    <script type="module" src="{{ url_for('static', filename='js/firebase.js') }}"></script>
 </body>
 </html>

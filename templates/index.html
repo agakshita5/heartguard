@@ -352,7 +352,6 @@
             </div>
             
             <!-- Medication Reminder Card -->
-            <!-- In your home.html, add this card to the feature-cards section -->
             <div class="feature-card">
                 <div class="feature-content">
                     <div class="feature-icon med-icon">
@@ -466,76 +465,6 @@
     </div>
 </section>
 
-<!-- to be edited -->
-<!-- Testimonials Section -->
-<section class="testimonials">
-    <div class="container">
-        <div class="section-title">
-            <h2>Reviews</h2>
-            <p>Hear from people who improved their heart health</p>
-        </div>
-        
-        <div class="testimonial-grid">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://randomuser.me/api/portraits/women/45.jpg" class="testimonial-img">
-                    <div>
-                        <div class="testimonial-author">Sarah Johnson</div>
-                        <div class="testimonial-role">Age 58, High Risk → Moderate</div>
-                    </div>
-                </div>
-                <p class="testimonial-text">"Using all three tools together helped me lower my blood pressure and cholesterol within 6 months. The meal plans are delicious and easy to follow!"</p>
-                <div class="testimonial-rating">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </div>
-            </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="testimonial-img">
-                    <div>
-                        <div class="testimonial-author">Michael Chen</div>
-                        <div class="testimonial-role">Age 62, Post-Bypass</div>
-                    </div>
-                </div>
-                <p class="testimonial-text">"The medication reminders have been a lifesaver after my surgery. Combined with the heart-healthy meals, I've never felt better!"</p>
-                <div class="testimonial-rating">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-half"></i>
-                </div>
-            </div>
-            
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" class="testimonial-img">
-                    <div>
-                        <div class="testimonial-author">Priya Patel</div>
-                        <div class="testimonial-role">Age 42, Preventive Care</div>
-                    </div>
-                </div>
-                <p class="testimonial-text">"The risk assessment showed me areas to improve before problems developed. Now I use all three tools to maintain my heart health."</p>
-                <div class="testimonial-rating">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -563,6 +492,6 @@
 <script>
   const firebaseConfig = {{ firebase_config | tojson }};
 </script>
-<script src="{{ url_for('static', filename='firebase.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/firebase.js') }}"></script>
 
 {% endblock %}
