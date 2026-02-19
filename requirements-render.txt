@@ -8,3 +8,6 @@ firebase-admin==6.8.0
 flask_login==0.6.3
 pandas==3.0.1
 scikit-learn==1.8.0
+pytesseract==0.3.13
+Pillow==12.1.1
+pdf2image==1.17.0
