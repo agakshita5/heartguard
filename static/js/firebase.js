@@ -232,7 +232,6 @@ function setupSignIn() {
             
             // Get ID token
             const token = await user.getIdToken(true); // Force refresh
-            console.log("Firebase ID token generated");
             
             // Send token to backend
             const response = await fetch('/login', {
