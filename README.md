@@ -16,7 +16,7 @@ Check out the deployed application: [HeartGuard](https://heartguard-1t6s.onrende
 
 - **Backend**: Python, Flask
 - **Machine Learning**: Random Forest (heart risk prediction)
-- **Frontend**: HTML5, CSS3, JavaScript
+- **Frontend**: HTML, CSS, JavaScript
 
 ## ✨ Key Features
 
