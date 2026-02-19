@@ -2,7 +2,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from datetime import datetime, timezone, timedelta, date
-import pandas as pd
 import logging
 import json
 import firebase_admin
