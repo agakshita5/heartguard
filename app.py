@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 import os
 from utils.model_predictor import predictor
 from utils.meal_planner import get_meal_plan
-from utils.medication_reminder import (  # Import your medication functions
+from utils.medication_reminder import (  # Import medication functions
     allowed_file, extract_text_from_image, 
     extract_text_from_pdf, parse_medication_details,
     create_reminder_schedule
@@ -24,16 +24,20 @@ load_dotenv()
 
 # Initialize Flask Application
 app = Flask(__name__)
-# app.secret_key = 'your-secret-key-here'  # Change this for production
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev-secret-key')
 
 # Initialize Firebase Admin
 def initialize_firebase():
     try:
-        # Path to your Firebase service account key
-        cred_path = os.path.join(os.path.dirname(__file__), 'firebase', 'serviceAccountKey.json')
-        cred = credentials.Certificate(cred_path)
-        firebase_admin.initialize_app(cred)
-        print("Firebase Admin initialized successfully")
+        firebase_creds = os.getenv('FIREBASE_ADMIN_CREDENTIALS')
+        if firebase_creds:
+            # Load the JSON string into a dict
+            cred_dict = json.loads(firebase_creds)
+            cred = credentials.Certificate(cred_dict)
+            firebase_admin.initialize_app(cred)
+            print("Firebase Admin initialized successfully using env credentials")
+        else:
+            raise Exception("FIREBASE_ADMIN_CREDENTIALS not found in environment variables")
     except Exception as e:
         print(f"Error initializing Firebase Admin: {e}")
 
@@ -51,10 +55,6 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
-
-# ======================
-# Application Routes
-# ======================
 
 # Register blueprints
 app.register_blueprint(meal_bp)
@@ -106,6 +106,7 @@ def login():
     
     try:
         decoded_token = firebase_admin.auth.verify_id_token(token)
+        print("Received token:", token)
         uid = decoded_token['uid']
         user = User(uid)
         login_user(user)  
@@ -146,10 +147,10 @@ def assessment():
             'thal': int(request.form['thalassemia'])
         }
         
-        # Get prediction using your model
+        # Get prediction using model
         prediction = predictor.predict_risk(model_input)
         
-        # Prepare features for display (using actual feature importance)
+        # Prepare features for display
         features = {
             feature: importance * 100  # Convert to percentage
             for feature, importance in prediction['feature_importance'].items()
@@ -161,7 +162,7 @@ def assessment():
         # Store the data
         if current_user.is_authenticated:
             user_id = current_user.get_id()
-            print('user_id : app.py', user_id) # debug code
+            # print('user_id : app.py', user_id) # debug code
             user_ref = db.collection('users').document(user_id)
             assessment_ref = user_ref.collection('assessments').document()
 
@@ -172,7 +173,7 @@ def assessment():
                 'recommendation': prediction['recommendation'],
                 **model_input
             }
-            print(assessment_data) # debug code
+            # print(assessment_data) # debug code
             assessment_ref.set(assessment_data)
 
         session['show_toast'] = True
@@ -276,7 +277,7 @@ def dashboard():
         },
         {
             'name': 'BMI',
-            'value': 26.4,  # Still static unless you collect height/weight
+            'value': 26.4, 
             'icon': 'bi-speedometer2',
             'color': 'success',
             'trend': 'down',
@@ -384,10 +385,6 @@ def med_reminder_upload():
     
     flash('Invalid file type', 'error')
     return redirect(url_for('med_reminder_home'))
-
-# ======================
-# Application Entry Point
-# ======================
 
 if __name__ == '__main__':
     # Run the Flask application

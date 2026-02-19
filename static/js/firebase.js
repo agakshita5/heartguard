@@ -5,9 +5,9 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { getFirestore, setDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const auth = getAuth();
-// const db = getFirestore();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
 
 function showMessage(message, divId) {
   const messageDiv = document.getElementById(divId);

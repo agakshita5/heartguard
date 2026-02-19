@@ -1,7 +1,8 @@
 import requests
 import json
+import os
 
-API_KEY = "bd67649cef144456ba8582830e98cdec"
+meal_api_key = os.getenv('MEAL_API_KEY')
 
 CALORIE_MAP = {
     "low": 2200,
@@ -23,7 +24,7 @@ def get_meal_plan(risk_level, preference, time_frame="day"):
     params = {
         "timeFrame": time_frame,
         "targetCalories": target_calories,
-        "apiKey": API_KEY
+        "apiKey": meal_api_key
     }
     if diet:
         params["diet"] = diet

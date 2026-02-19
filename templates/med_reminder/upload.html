@@ -236,8 +236,7 @@
             const fileName = document.createElement('p');
             fileName.className = 'fw-bold mt-2';
             fileName.innerHTML = `<i class="fas fa-file me-2"></i>${file.name}`;
-            
-            // Clear previous content but keep the upload icon and instructions
+        
             while (dropArea.childNodes.length > 3) {
                 dropArea.removeChild(dropArea.lastChild);
             }
@@ -246,7 +245,7 @@
         }
         
         // Form submission
-        // In your form submission handler
+        // In form submission handler
 document.getElementById('prescriptionForm').addEventListener('submit', function(e) {
     e.preventDefault();
     

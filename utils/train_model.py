@@ -6,7 +6,7 @@ import pickle
 import os
 
 # Load your dataset
-df = pd.read_csv('/Users/agakshita/Desktop/hb_flask2/data/hd.csv')
+df = pd.read_csv('data/hd.csv')
 df = df.rename(columns={
     'trestbps': 'bps',
     'thalachh': 'mhr'
@@ -28,10 +28,10 @@ X_train[numerical_cols] = scaler.fit_transform(X_train[numerical_cols])
 X_test[numerical_cols] = scaler.transform(X_test[numerical_cols])
 
 # Create models directory if it doesn't exist
-os.makedirs('/Users/agakshita/Desktop/hb_flask2/app/models', exist_ok=True)
+os.makedirs('models', exist_ok=True)
 
 # Save the scaler
-with open('/Users/agakshita/Desktop/hb_flask2/app/models/scaler.pkl', 'wb') as f:
+with open('models/scaler.pkl', 'wb') as f:
     pickle.dump(scaler, f)
 
 # Train and save the model
@@ -45,7 +45,7 @@ model = RandomForestClassifier(
 )
 model.fit(X_train, y_train)
 
-with open('/Users/agakshita/Desktop/hb_flask2/app/models/heart_model.pkl', 'wb') as f:
+with open('models/heart_model.pkl', 'wb') as f:
     pickle.dump(model, f)
 
 print("Model trained and saved successfully!")
